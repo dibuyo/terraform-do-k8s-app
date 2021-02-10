@@ -2,11 +2,23 @@ variable "domain" {
     type = string
 }
 
+variable "domain_alt" {
+    type = string
+}
+
 variable "mysql_usr_wordpress" {
     type = string
 }
 
 variable "mysql_pwd_wordpress" {
+    type = string
+}
+
+variable "mysql_pwd_wordpress_alt" {
+    type = string
+}
+
+variable "mysql_usr_wordpress_alt" {
     type = string
 }
 
@@ -31,5 +43,14 @@ variable "metabase_url"{
 }
 
 variable "metabase_db"{
+    type = string
+}
+
+variable "pgadmin_default_email" {
+    type = string
+    default = "myjourneydb"
+}
+
+variable "pgadmin_default_password" {
     type = string
 }

@@ -3,6 +3,10 @@ variable "domain" {
     default = "myjourneysalud.com"
 }
 
+variable "domain_alt" {
+    type = string
+}
+
 variable "do_token" {
     type = string
 }
@@ -27,6 +31,14 @@ variable "mysql_usr_wordpress" {
 }
 
 variable "mysql_pwd_wordpress" {
+    type = string
+}
+
+variable "mysql_usr_wordpress_alt" {
+    type = string
+}
+
+variable "mysql_pwd_wordpress_alt" {
     type = string
 }
 
@@ -81,5 +93,15 @@ variable "postgres_user" {
 }
 
 variable "postgres_password" {
+    type = string
+}
+
+# ------ PgAdmin ------ #
+variable "pgadmin_default_email" {
+    type = string
+    default = "myjourneydb"
+}
+
+variable "pgadmin_default_password" {
     type = string
 }

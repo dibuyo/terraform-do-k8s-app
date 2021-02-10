@@ -21,11 +21,33 @@ resource "digitalocean_domain" "public_domain" {
   ip_address = var.loadbalancer_ip
 }
 
+resource "digitalocean_domain" "public_domain_alt" {
+  name       = var.domain_alt
+  ip_address = var.loadbalancer_ip
+}
+
 resource "digitalocean_record" "public_apex" {
   domain = var.domain
   type   = "A"
   name   = "@"
   value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "public_apex_alt" {
+  domain = var.domain_alt
+  type   = "A"
+  name   = "@"
+  value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "mx_alt_records" {
+  for_each = local.mx_records
+  domain   = var.domain_alt
+  type     = "MX"
+  name     = "@"
+  priority = each.value
+  value    = each.key
+  ttl      = local.default_ttl
 }
 
 resource "digitalocean_record" "postgresdb_record" {
@@ -61,6 +83,19 @@ resource "digitalocean_record" "mx_workspace_validate" {
   value  = "yiw6o7s6apl752b3cv6oau6iagsm6heu6y3lyr6djx3k46sjnn3a.mx-verification.google.com."
 }
 
+resource "digitalocean_record" "wildcard_alt" {
+  domain = var.domain_alt
+  type   = "A"
+  name   = "*"
+  value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "www_domain_alt" {
+  domain = var.domain_alt
+  type   = "A"
+  name   = "www"
+  value  = var.loadbalancer_ip
+}
 /*
 resource "digitalocean_record" "sendgrid_cname_01" {
   domain = var.domain

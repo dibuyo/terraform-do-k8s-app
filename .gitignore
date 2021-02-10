@@ -74,3 +74,6 @@ website/node_modules
 *.iml
 
 website/vendor
+
+database/do/run/mysql_initdb.sql
+database/do/run/postgres_initdb.sql

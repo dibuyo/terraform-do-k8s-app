@@ -12,6 +12,7 @@ module "dns" {
   source = "./dns/do"
 
   domain = var.domain
+  domain_alt = var.domain_alt
   loadbalancer_ip = data.digitalocean_loadbalancer.myjourney.ip
 }
 
@@ -49,13 +50,20 @@ module "app" {
   source = "./app/do"
 
   domain = var.domain
+  domain_alt = var.domain_alt
+
   mysql_instance_name = var.mysql_default_database
   mysql_usr_wordpress = var.mysql_usr_wordpress
   mysql_pwd_wordpress = var.mysql_pwd_wordpress
+  mysql_usr_wordpress_alt = var.mysql_usr_wordpress_alt
+  mysql_pwd_wordpress_alt = var.mysql_pwd_wordpress_alt
   mysql_namespace = module.datastore.datastore_namespace
 
   metabase_url = "${var.metabase_subdomian}.${var.domain}"
   metabase_db = var.metabase_db
   metabase_usr = var.metabase_usr_name
   metabase_pwd = var.metabase_pwd #random_password.metabase_pwd.result
+
+  pgadmin_default_email = var.pgadmin_default_email
+  pgadmin_default_password = var.pgadmin_default_password
 }

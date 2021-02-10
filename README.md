@@ -1,4 +1,8 @@
-## Terraform
+## Proyecto de Terraform
+
+Este proyecto contiene la receta para crear un Cluster de Kubernetes sobre Digital Ocean con 4 workers como Infra principal. Adicionalmente registra el dominio en Digital Ocean, crea los MX de Google Workspace y registra los TXT necesarios para validar SendGrid. Dentro del Cluster de K8s instala los servicios de Ingress Control con Traefik, instala el sitio principal en Wordpress. Y los servicios de MySQL, Postgre y MongoDB. Así también como Verdaccio que es un repositorio de NPM.
+
+## Terraform
 
 - Website: https://www.terraform.io
 - Forums: [HashiCorp Discuss](https://discuss.hashicorp.com/c/terraform-core)
@@ -63,6 +67,6 @@ terraform destroy
 
 [https://registry.terraform.io/providers/hashicorp/kubernetes/latest]
 
-[https://www.terraform.io/docs/providers/aws/](https://www.terraform.io/docs/providers/aws/)
+[https://www.terraform.io/docs/providers/aws/]
 
-[https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples](https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples)
+[https://github.com/terraform-providers/terraform-provider-aws/tree/master/examples]

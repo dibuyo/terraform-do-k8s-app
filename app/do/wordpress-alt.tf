@@ -1,6 +1,6 @@
-resource "kubernetes_persistent_volume_claim" "wordpress_volume_claim" {
+resource "kubernetes_persistent_volume_claim" "wordpress_alt_volume_claim" {
   metadata {
-    name = "wordpress-pv-claim"
+    name = "wordpress-alt-pv-claim"
     namespace = "app"
   }
   spec {
@@ -8,18 +8,18 @@ resource "kubernetes_persistent_volume_claim" "wordpress_volume_claim" {
     
     resources {
       requests = {
-        storage = "5Gi"
+        storage = "2Gi"
       }
     }
   }
 }
 
-resource "kubernetes_deployment" "wordpress" {
+resource "kubernetes_deployment" "wordpress_alt" {
 
   metadata {
-    name = "wordpress"
+    name = "wordpress-alt"
     labels = {
-      app = "wordpress"
+      app = "wordpress-alt"
     }
     namespace = "app"
   }
@@ -29,7 +29,7 @@ resource "kubernetes_deployment" "wordpress" {
     replicas = 1
     selector {
       match_labels = {
-        app = "wordpress"
+        app = "wordpress-alt"
       }
     }
 
@@ -37,7 +37,7 @@ resource "kubernetes_deployment" "wordpress" {
 
       metadata {
         labels = {
-          app = "wordpress"
+          app = "wordpress-alt"
         }
       }
 
@@ -45,7 +45,7 @@ resource "kubernetes_deployment" "wordpress" {
 
         container {
           image = "wordpress"
-          name  = "wordpress"
+          name  = "wordpress-alt"
 
           port {
             container_port = 80
@@ -56,11 +56,6 @@ resource "kubernetes_deployment" "wordpress" {
             name = "wordpress-persistent-html"
           }
 
-          /*volume_mount {
-            mount_path = "/docker-entrypoint-initdb.d"
-            name = "mysql-initdb"
-          }*/
-
           env {
             name = "WORDPRESS_DB_HOST"
             value = "mysql.${var.mysql_namespace}.svc.cluster.local."
@@ -68,17 +63,17 @@ resource "kubernetes_deployment" "wordpress" {
           
           env {
             name = "WORDPRESS_DB_USER"
-            value = var.mysql_usr_wordpress
+            value = var.mysql_usr_wordpress_alt
           }
 
           env {
             name = "WORDPRESS_DB_PASSWORD"
-            value = var.mysql_pwd_wordpress
+            value = var.mysql_pwd_wordpress_alt
           }
 
           env {
             name = "WORDPRESS_DB_NAME"
-            value = "myjourney_wpdb"
+            value = "academiaperioperatoria_wpdb"
           }
 
           args = [
@@ -100,34 +95,26 @@ resource "kubernetes_deployment" "wordpress" {
         volume {
           name = "wordpress-persistent-html"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.wordpress_volume_claim.metadata.0.name
+            claim_name = kubernetes_persistent_volume_claim.wordpress_alt_volume_claim.metadata.0.name
           } 
         }
-
-        /*volume {
-          name = "mysql-initdb"
-          config_map {
-            name = "mysql-initdb-config"
-          }
-        }*/
-
       }
     }
   }
 }
 
-resource "kubernetes_service" "wordpress" {
+resource "kubernetes_service" "wordpress_alt" {
   metadata {
-    name = "wordpress"
+    name = "wordpress-alt"
     annotations = {
-        name = "wordpress-service"
+        name = "wordpress-alt-service"
     }
     namespace = "app"
   }
 
   spec {
     selector = {
-      app = kubernetes_deployment.wordpress.spec.0.template.0.metadata[0].labels.app
+      app = kubernetes_deployment.wordpress_alt.spec.0.template.0.metadata[0].labels.app
     }
     
     port {
@@ -140,14 +127,14 @@ resource "kubernetes_service" "wordpress" {
   }
 }
 
-resource "kubernetes_manifest" "wordpress_ingress_route" {
+resource "kubernetes_manifest" "wordpress_alt_ingress_route" {
     provider = kubernetes-alpha
   
     manifest =  {
         apiVersion = "traefik.containo.us/v1alpha1"
         kind = "IngressRoute"
         metadata = {
-            name = "wordpress"
+            name = "wordpress-academia"
             namespace = "app"
         }
         spec = {
@@ -158,10 +145,10 @@ resource "kubernetes_manifest" "wordpress_ingress_route" {
 
             routes = [{
               kind = "Rule"
-              match = "Host(`${var.domain}`) || Host(`blog.${var.domain}`) || Host(`www.${var.domain}`)"
+              match = "Host(`${var.domain_alt}`) || Host(`blog.${var.domain_alt}`) || Host(`www.${var.domain_alt}`)"
               
               services = [{
-                name = "wordpress"
+                name = kubernetes_service.wordpress_alt.metadata[0].name
                 port = 80
               }]
 
@@ -175,7 +162,7 @@ resource "kubernetes_manifest" "wordpress_ingress_route" {
               certResolver = "le"
               domains = [{
                 main = var.domain
-                sans = [ "blog.${var.domain}", "www.${var.domain}" ]
+                sans = [ "blog.${var.domain_alt}", "www.${var.domain_alt}" ]
               }]
             }
         }
