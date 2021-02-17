@@ -28,7 +28,7 @@ resource "kubernetes_deployment" "metabase" {
       spec {
 
         container {
-          image = "metabase/metabase:v0.37.6"
+          image = "metabase/metabase:v0.38"
           name  = "metabase"
 
           port {
