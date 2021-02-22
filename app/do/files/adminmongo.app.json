@@ -1,0 +1,10 @@
+{
+    "app": {
+        "host": "myjourney-mongodb.datastore.svc.cluster.local",
+        "port": 27017,
+        "password": "",
+        "locale": "es",
+        "context": "",
+        "monitoring": true
+    }
+}

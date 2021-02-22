@@ -1,0 +1,19 @@
+entryPoints:
+  web:
+    address: ":8000"
+
+  websecure:
+    address: ":8443"
+
+  traefik:
+    address: ":9000"
+
+accessLog:
+  filePath: "/var/log/traefik/access.v2.log"
+  bufferingSize: 100
+
+api:
+  dashboard: true
+
+log:
+  level: DEBUG

@@ -1,0 +1,27 @@
+logLevel = "info"
+defaultEntryPoints = ["http","https"]
+defaultErrorsStatus = "400-599"
+defaultErrorsBackend = "nginx-errors"
+defaultErrorsQuery = "/{status}.html"
+[backends]
+  [backends.error]
+    [backends.error.servers.error]
+    url = "http://10.100.236.200"
+
+[entryPoints]
+  [entryPoints.web]
+    address = ":80"
+[entryPoints.websecure]
+  address = ":443"
+
+[ping]
+entryPoint = "http"
+
+[api]
+  entryPoint = "traefik"
+  dashboard = true
+  [api.statistics]
+    recentErrors = 20
+
+[accessLog]
+  filePath = "/var/log/traefik/access.v2.log"
