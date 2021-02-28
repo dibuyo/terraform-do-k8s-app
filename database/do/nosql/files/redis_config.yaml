@@ -1,0 +1,6 @@
+maxmemory 128mb
+maxmemory-policy allkeys-lru
+# Enable AOF https://redis.io/topics/persistence#append-only-file 
+appendonly yes
+# Disable RDB persistence, AOF persistence already enabled.  
+save ""

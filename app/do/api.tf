@@ -1,3 +1,19 @@
+resource "kubernetes_persistent_volume_claim" "myjourney_api_volume_claim" {
+  metadata {
+    name = "myjourney-api-pv-claim"
+    namespace = "app"
+  }
+  spec {
+    access_modes = ["ReadWriteOnce"]
+    
+    resources {
+      requests = {
+        storage = "2Gi"
+      }
+    }
+  }
+}
+
 resource "kubernetes_config_map" "myjourney_api_config" {
   metadata {
     name = "myjourney-api-config"
@@ -39,15 +55,21 @@ resource "kubernetes_deployment" "myjourney_api" {
       spec {
 
         container {
-          image = "registry.digitalocean.com/myjourney-apps/api-1"
+          image_pull_policy = "Always"
+          image = "registry.digitalocean.com/myjourney-apps/api:test"
           name  = "myjourney-api"
 
-           volume_mount {
-               mount_path = "/usr/src/api/.env"
-               sub_path = ".env"
-               name = "myjourney-api-config-path"
-               read_only = true
-           }
+          volume_mount {
+              mount_path = "/usr/src/api/.env"
+              sub_path = ".env"
+              name = "myjourney-api-config-path"
+              read_only = true
+          }
+
+          volume_mount {
+            mount_path = "/usr/src/api/public"
+            name = "myjourney-api-public"
+          }
 
           port {
             container_port = 3000
@@ -59,6 +81,13 @@ resource "kubernetes_deployment" "myjourney_api" {
             config_map {
                 name = "myjourney-api-config"
             }
+        }
+
+        volume {
+          name = "myjourney-api-public"
+          persistent_volume_claim {
+            claim_name = kubernetes_persistent_volume_claim.myjourney_api_volume_claim.metadata.0.name
+          } 
         }
       }
     }

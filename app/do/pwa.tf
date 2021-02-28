@@ -40,7 +40,8 @@ resource "kubernetes_deployment" "myjourney_pwa" {
 
         container {
           stdin = true
-          image = "registry.digitalocean.com/myjourney-apps/api-1:pwa"
+          image = "registry.digitalocean.com/myjourney-apps/pwa:test"
+          image_pull_policy = "Always"
           name  = "myjourney-pwa"
 
            volume_mount {
