@@ -60,6 +60,11 @@ resource "kubernetes_deployment" "myjourney_pwa" {
             name = "REACT_APP_PWA_URL"
             value = "https://app.${var.domain}"
           }
+
+          env {
+            name = "SENTRY_DSN"
+            value = "https://96d6618eda1a4976b0406244ade73fe7@o564212.ingest.sentry.io/5706744"
+          }
           
           env {
             name = "REACT_APP_PUSHER_INSTANCE_ID"
@@ -67,7 +72,7 @@ resource "kubernetes_deployment" "myjourney_pwa" {
           }
 
           port {
-            container_port = 3000
+            container_port = 80
           }
         }
 
@@ -99,7 +104,7 @@ resource "kubernetes_service" "myjourney_pwa" {
     port {
       name        = "http"
       port        = 80
-      target_port = 3000
+      target_port = 80
     }
     
     type = "ClusterIP"

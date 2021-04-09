@@ -1,4 +1,4 @@
-maxmemory 128mb
+maxmemory 2048mb
 maxmemory-policy allkeys-lru
 # Enable AOF https://redis.io/topics/persistence#append-only-file 
 appendonly yes

@@ -1,18 +1,18 @@
-resource "kubernetes_persistent_volume_claim" "myjourney_api_volume_claim" {
-  metadata {
-    name = "myjourney-api-pv-claim"
-    namespace = "app"
-  }
-  spec {
-    access_modes = ["ReadWriteOnce"]
-    
-    resources {
-      requests = {
-        storage = "2Gi"
-      }
-    }
-  }
-}
+#resource "kubernetes_persistent_volume_claim" "myjourney_api_volume_claim" {
+#  metadata {
+#    name = "myjourney-api-pv-claim"
+#    namespace = "app"
+#  }
+#  spec {
+#    access_modes = ["ReadWriteOnce"]
+#    
+#    resources {
+#      requests = {
+#        storage = "2Gi"
+#      }
+#    }
+#  }
+#}
 
 resource "kubernetes_config_map" "myjourney_api_config" {
   metadata {
@@ -23,6 +23,10 @@ resource "kubernetes_config_map" "myjourney_api_config" {
   data = {
     ".env" = file("./${path.module}/files/env.api")
   }
+
+  /*binary_data = {
+    "patient.invite.email.es.pdf" = filebase64("./${path.module}/files/email.es.pdf")
+  }*/
 }
 
 resource "kubernetes_deployment" "myjourney_api" {
@@ -66,9 +70,21 @@ resource "kubernetes_deployment" "myjourney_api" {
               read_only = true
           }
 
+          /*volume_mount {
+            mount_path = "/usr/src/api/static/email/email.es.pdf"
+            sub_path = "patient.invite.email.es.pdf"
+            name = "myjourney-api-public"
+            read_only = true
+          }*/
+
           volume_mount {
             mount_path = "/usr/src/api/public"
             name = "myjourney-api-public"
+          }
+
+          env {
+            name = "SENTRY_DSN"
+            value = "https://a27c7e0af0094b419beb29a9846ce570@o564212.ingest.sentry.io/5706741"
           }
 
           port {
@@ -85,9 +101,12 @@ resource "kubernetes_deployment" "myjourney_api" {
 
         volume {
           name = "myjourney-api-public"
-          persistent_volume_claim {
+          empty_dir {
+            size_limit = "2Gi"
+          }
+          /*persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.myjourney_api_volume_claim.metadata.0.name
-          } 
+          } */
         }
       }
     }

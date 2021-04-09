@@ -43,6 +43,10 @@ resource "kubernetes_deployment" "myjourney_scheduler" {
             name = "REDIS_HOST"
             value = "redis.datastore.svc.cluster.local."
           }*/
+          env {
+            name = "SENTRY_DSN"
+            value = "https://8b5f8f3c1db144f8ac070940138ea0db@o564212.ingest.sentry.io/5706743"
+          }
 
           port {
             container_port = 3000

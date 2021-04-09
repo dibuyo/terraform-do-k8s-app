@@ -53,9 +53,32 @@ resource "kubernetes_deployment" "redis" {
             }
         }
 
+        init_container {
+            image = "busybox"
+            name  = "init-2"
+
+            command = [ "sh", "-c", "sysctl net.core.somaxconn=512" ]
+
+            security_context {
+              privileged = true
+            }
+
+            volume_mount {
+                mount_path = "/host-sys"
+                name = "host-sys"
+            }
+        }
+
         container {
           image = "redis:6.0"
           name  = "redis"
+
+          /*security_context {
+            sysctl {
+              name = "net.core.somaxconn"
+              value = "512"
+            }
+          }*/
 
           command = [ "redis-server", "/redis-master/redis.conf" ]
 
@@ -82,11 +105,11 @@ resource "kubernetes_deployment" "redis" {
 
           //args = ["--ignore-db-dir=lost+found"]
 
-          resources {
+          /*resources {
             limits {
               cpu    = "0.1"
             }
-          }
+          }*/
 
         }
 
