@@ -13,6 +13,7 @@ locals {
     "s2._domainkey" = "s2.domainkey.u20019805.wl056.sendgrid.net."
     "url1325" = "sendgrid.net."
     "20019805" = "sendgrid.net."
+    "em8751" = "u20019805.wl056.sendgrid.net."
   }
 }
 
@@ -83,6 +84,30 @@ resource "digitalocean_record" "mx_workspace_validate" {
   value  = "yiw6o7s6apl752b3cv6oau6iagsm6heu6y3lyr6djx3k46sjnn3a.mx-verification.google.com."
 }
 
+/*
+resource "digitalocean_record" "send_grid_em8529" {
+  domain = var.domain
+  type   = "A"
+  name   = "em8529"
+  value  = var.loadbalancer_ip
+}
+*/
+resource "digitalocean_record" "txt" {
+  domain = var.domain
+  type   = "TXT"
+  name   = "@"
+  value  = "v=spf1 a mx ip4:149.72.75.190 include:em8751.myjourneysalud.com include:_spf.google.com include:_netblocks.google.com ~all"
+}
+
+resource "digitalocean_record" "dmarc" {
+  domain = var.domain
+  type   = "TXT"
+  name   = "_dmarc"
+  value  = "v=DMARC1; p=reject; rua=mailto:dmarc@myjourneysalud.com; pct=100; adkim=s; aspf=s"
+}
+
+//Alternative Domain
+
 resource "digitalocean_record" "wildcard_alt" {
   domain = var.domain_alt
   type   = "A"
@@ -96,6 +121,20 @@ resource "digitalocean_record" "www_domain_alt" {
   name   = "www"
   value  = var.loadbalancer_ip
 }
+
+resource "digitalocean_record" "txt_alt" {
+  domain = var.domain_alt
+  type   = "TXT"
+  name   = "@"
+  value  = "v=spf1 a mx ip4:149.72.75.190 include:em8751.myjourneysalud.com include:_spf.google.com include:_netblocks.google.com ~all"
+}
+
+/*resource "digitalocean_record" "dmarc_alt" {
+  domain = var.domain_alt
+  type   = "TXT"
+  name   = "_dmarc"
+  value  = "v=spf1 a mx ip4:149.72.75.190 include:em8751.myjourneysalud.com include:_spf.google.com include:_netblocks.google.com ~all"
+}*/
 /*
 resource "digitalocean_record" "sendgrid_cname_01" {
   domain = var.domain
