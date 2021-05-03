@@ -33,6 +33,9 @@ Version used:
 * * Verdaccio
 * * Wordpress
 
+## Diagram Services
+![Services](https://myjourneysalud.s3.amazonaws.com/wiki/dg-services.png)
+
 ## Variables
 * do_token: Token Digital Ocean
 * domain: Main Domain Name
