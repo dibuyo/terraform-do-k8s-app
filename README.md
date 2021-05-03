@@ -17,7 +17,7 @@ Version used:
 * Digital Ocean
 * AWS
 
-##Architecture
+## Architecture
 ![Architecture](https://myjourneysalud.s3.amazonaws.com/wiki/dg-architecture.png)
 
 ## Services
