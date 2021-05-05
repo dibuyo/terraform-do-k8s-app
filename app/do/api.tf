@@ -41,7 +41,7 @@ resource "kubernetes_deployment" "myjourney_api" {
 
   spec {
 
-    replicas = 1
+    replicas = 2
     selector {
       match_labels = {
         app = "myjourney-api"

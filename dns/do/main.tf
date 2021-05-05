@@ -106,6 +106,34 @@ resource "digitalocean_record" "dmarc" {
   value  = "v=DMARC1; p=reject; rua=mailto:dmarc@myjourneysalud.com; pct=100; adkim=s; aspf=s"
 }
 
+resource "digitalocean_record" "app_record" {
+  domain = var.domain
+  type   = "A"
+  name   = "app"
+  value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "reports_record" {
+  domain = var.domain
+  type   = "A"
+  name   = "reportes"
+  value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "api_record" {
+  domain = var.domain
+  type   = "A"
+  name   = "api"
+  value  = var.loadbalancer_ip
+}
+
+resource "digitalocean_record" "blog_record" {
+  domain = var.domain
+  type   = "A"
+  name   = "blog"
+  value  = var.loadbalancer_ip
+}
+
 //Alternative Domain
 
 resource "digitalocean_record" "wildcard_alt" {
