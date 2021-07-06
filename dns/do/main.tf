@@ -15,6 +15,11 @@ locals {
     "20019805" = "sendgrid.net."
     "em8751" = "u20019805.wl056.sendgrid.net."
   }
+  sendgrid_alt_cname_records = {
+    "em1387" = "u21645754.wl005.sendgrid.net."
+    "s1._domainkey" = "s2.domainkey.u21645754.wl005.sendgrid.net."
+    "s2._domainkey" = "s1.domainkey.u21645754.wl005.sendgrid.net."
+  }
 }
 
 resource "digitalocean_domain" "public_domain" {
@@ -155,6 +160,14 @@ resource "digitalocean_record" "txt_alt" {
   type   = "TXT"
   name   = "@"
   value  = "v=spf1 a mx ip4:149.72.75.190 include:em8751.myjourneysalud.com include:_spf.google.com include:_netblocks.google.com ~all"
+}
+
+resource "digitalocean_record" "sendgrid_alt_cname_records" {
+  for_each = local.sendgrid_alt_cname_records
+  domain   = var.domain_alt
+  type     = "CNAME"
+  name     = each.key
+  value    = each.value
 }
 
 /*resource "digitalocean_record" "dmarc_alt" {

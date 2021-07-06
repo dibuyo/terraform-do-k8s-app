@@ -65,11 +65,6 @@ resource "kubernetes_deployment" "myjourney_pwa" {
             name = "SENTRY_DSN"
             value = "https://96d6618eda1a4976b0406244ade73fe7@o564212.ingest.sentry.io/5706744"
           }
-          
-          env {
-            name = "REACT_APP_PUSHER_INSTANCE_ID"
-            value = "924714a1-6341-4a66-af55-1936cdc384d0"
-          }
 
           port {
             container_port = 80

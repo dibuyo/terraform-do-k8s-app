@@ -161,7 +161,7 @@ resource "kubernetes_manifest" "wordpress_alt_ingress_route" {
             tls = {
               certResolver = "le"
               domains = [{
-                main = var.domain
+                main = var.domain_alt
                 sans = [ "blog.${var.domain_alt}", "www.${var.domain_alt}" ]
               }]
             }
