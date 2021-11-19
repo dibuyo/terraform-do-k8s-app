@@ -48,6 +48,30 @@ resource "kubernetes_manifest" "traefil-custom-manifest" {
     }
 }
 
+resource "kubernetes_manifest" "traefil-custom-manifest-tcp" {
+    provider = kubernetes-alpha
+  
+    manifest =  {
+        apiVersion = "apiextensions.k8s.io/v1beta1"
+        kind = "CustomResourceDefinition"
+        metadata = {
+            name = "middlewaretcps.traefik.containo.us"
+            namespace = "ingress"
+        }
+        spec = {
+            group = "traefik.containo.us"
+            version  = "v1alpha1"
+            names = {
+                kind = "MiddlewareTCP"
+                listKind = "MiddlewareTCPList"
+                plural = "middlewaretcps"
+                singular = "middlewaretcp"
+            }
+            scope = "Namespaced"
+        }
+    }
+}
+
 resource "kubernetes_manifest" "traefil-custom-manifest-router-tcp" {
     provider = kubernetes-alpha
 
@@ -234,7 +258,7 @@ resource "kubernetes_cluster_role" "traefil-custom-cluster-role" {
 
   rule {
     api_groups = ["traefik.containo.us"]
-    resources  = ["ingressroutes", "ingressroutetcps", "ingressrouteudps", "middlewares", "tlsoptions", "tlsstores", "traefikservices", "serverstransports"]
+    resources  = ["ingressroutes", "ingressroutetcps", "ingressrouteudps", "middlewares", "middlewaretcps", "tlsoptions", "tlsstores", "traefikservices", "serverstransports"]
     verbs      = ["get", "list", "watch"]
   }
 
@@ -322,7 +346,7 @@ resource "kubernetes_deployment" "traefik" {
         automount_service_account_token = true
 
         container {
-          image = "traefik:2.4"
+          image = "traefik:2.5"
           name  = "traefik"
 
           port {
@@ -376,6 +400,7 @@ resource "kubernetes_deployment" "traefik" {
               "--accesslog.fields.headers.names.Content-Type=keep",
               "--metrics.prometheus=true",
               "--metrics.prometheus.buckets=0.1,0.3,1.2,5.0",
+              "--providers.kubernetescrd.allowCrossNamespace=true",
               #"--pilot.token=9f2bc994-d5a1-45fa-894e-a2b886133692"
           ]
 

@@ -1,7 +1,7 @@
 resource "digitalocean_kubernetes_cluster" "k8s_main_cluster" {
   name   = "k8s-19-nyc1-my-journey"
   region = "nyc1"
-  version = "1.19.3-do.3"
+  version = "1.19.15-do.0"
 
   node_pool {
     name       = "pool-ogjookpq8"

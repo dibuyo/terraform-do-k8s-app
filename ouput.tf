@@ -14,10 +14,10 @@ output "lb_output" {
     value = data.digitalocean_loadbalancer.myjourney.ip
 }
 
-output "metabase_pwd" {
+/*output "metabase_pwd" {
     description = "Metabase Password MYSQL"
     value = random_password.metabase_pwd.result
-}
+}*/
 
 output "user_name" {
   value       = module.storage.user_name
@@ -34,10 +34,10 @@ output "access_key_id" {
   description = "The access key ID"
 }
 
-output "secret_access_key" {
+/*output "secret_access_key" {
   value       = module.storage.secret_access_key
   description = "The secret access key. This will be written to the state file in plain-text"
-}
+}*/
 
 output "k8s_endpoint" {
   value       = module.k8s.k8s_endpoint
