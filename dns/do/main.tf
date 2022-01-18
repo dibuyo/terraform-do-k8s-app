@@ -1,5 +1,6 @@
 locals {
   default_ttl = 3600
+
   mx_records = {
     "aspmx.l.google.com." = 1
     "alt1.aspmx.l.google.com." = 5
@@ -7,6 +8,7 @@ locals {
     "alt3.aspmx.l.google.com." = 10
     "alt4.aspmx.l.google.com." = 10
   }
+
   sendgrid_records = {
     "em8529" = "u20019805.wl056.sendgrid.net."
     "s1._domainkey" = "s1.domainkey.u20019805.wl056.sendgrid.net."
@@ -15,11 +17,13 @@ locals {
     "20019805" = "sendgrid.net."
     "em8751" = "u20019805.wl056.sendgrid.net."
   }
+
   sendgrid_alt_cname_records = {
     "em1387" = "u21645754.wl005.sendgrid.net."
     "s1._domainkey" = "s2.domainkey.u21645754.wl005.sendgrid.net."
     "s2._domainkey" = "s1.domainkey.u21645754.wl005.sendgrid.net."
   }
+  
 }
 
 resource "digitalocean_domain" "public_domain" {
